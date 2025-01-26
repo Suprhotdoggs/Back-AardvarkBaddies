@@ -35,22 +35,22 @@ router.post('/register', async (req, res) => {
 });
 
 
-/*router.post('/login', async (req, res) => {
-    const { mail, contraseña } = req.body;
+router.post('/login', async (req, res) => {
+    const { name, lastname, password } = req.body;
 
-    if (!mail || !contraseña) {
+    if (!name|| !lastname|| !password) {
         return res.status(400).json({ message: 'Faltan datos.' });
     }
 
-    const result = await svc.loginUsuarioAsync(mail, contraseña);
+    const result = await svc.loginUsuarioAsync(name, lastname, password);
 
     if (result.error) {
         return res.status(401).json({ message: result.message });
     }
 
-    return res.status(200).json({ message: 'Login exitoso', userId: result.userId });
+    return res.status(200).json({ message: 'Login exitoso', idvisitor: result.idvisitor });
 });
-*/
+
 router.get('/username/:idvisitor', async (req, res) => {
     let respuesta;
     const idvisitor = req.params.idvisitor;
@@ -63,15 +63,15 @@ router.get('/username/:idvisitor', async (req, res) => {
     }
     return respuesta;
 });
-/*
-router.patch('/cambiar-contrasena', async (req, res) => {
-    const { idperfil, contraseñaActual, nuevaContraseña } = req.body;
 
-    if (!idperfil || !contraseñaActual || !nuevaContraseña) {
+router.patch('/change-password', async (req, res) => {
+    const { idvisitor, actualpassword, newpassword } = req.body;
+
+    if (!idvisitor|| !actualpassword || !newpassword) {
         return res.status(400).json({ message: 'Faltan datos.' });
     }
 
-    const result = await svc.cambiarContraseñaAsync(idperfil, contraseñaActual, nuevaContraseña);
+    const result = await svc.cambiarContraseñaAsync(idvisitor, actualpassword, newpassword);
 
     if (result.error) {
         return res.status(400).json({ message: result.message });
@@ -79,7 +79,7 @@ router.patch('/cambiar-contrasena', async (req, res) => {
 
     return res.status(200).json({ message: 'Contraseña cambiada exitosamente.' });
 });
-
+/*
 router.patch('/cambiar-foto-perfil', async (req, res) => {
     const { idperfil, foto } = req.body;  // Ahora recibimos la URL de la foto desde req.body
 
