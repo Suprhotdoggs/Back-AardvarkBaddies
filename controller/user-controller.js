@@ -79,34 +79,4 @@ router.patch('/change-password', async (req, res) => {
 
     return res.status(200).json({ message: 'Contraseña cambiada exitosamente.' });
 });
-/*
-router.patch('/cambiar-foto-perfil', async (req, res) => {
-    const { idperfil, foto } = req.body;  // Ahora recibimos la URL de la foto desde req.body
-
-    if (!idperfil || !foto) {
-        return res.status(400).json({ message: 'Faltan datos.' });
-    }
-
-    // Llamamos al servicio para cambiar la URL de la foto
-    const result = await svc.cambiarFotoPerfilAsync(idperfil, foto);
-
-    if (result.error) {
-        return res.status(400).json({ message: result.message });
-    }
-
-    return res.status(200).json({ message: 'Foto cambiada exitosamente.' });
-});
-router.get('/recuperar-contrasena/:mail', async (req, res) => {
-    let respuesta;
-    const mail = req.params.mail;
-
-    const returnArray = await svc.RecuperarContrasenaAsync(mail);
-    if (returnArray != null) {
-        respuesta = res.status(200).json(returnArray);
-    } else {
-        respuesta = res.status(500).send('Error Interno');
-    }
-    return respuesta;
-});
-*/
 export default router;
