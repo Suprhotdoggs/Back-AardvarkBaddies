@@ -10,17 +10,23 @@ export default class peopleService{
         const returnArray = await repo.findPerson(name, lastname);
         return returnArray;
     }
+    updatePerson = async (idpeople, name, lastname, gender, age, photo, country) => {
+        const repo = new peopleRepository();
+        const returnArray = await repo.updatePerson(idpeople, name, lastname, gender, age, photo, country);
+        return returnArray;
+    }
+    deletePerson = async (idpeople) => {
+        const repo = new peopleRepository();
+        const returnArray = await repo.deletePerson(idpeople);
+        return returnArray;
+    }
     /*
     loginUsuarioAsync = async (name, lastname, password) => {
         const repo = new userRepository();
         const returnArray = await repo.loginUsuarioAsync(name, lastname, password);
         return returnArray;
     }
-    getAllPerfilAsync = async (idvisitor) => {
-        const repo = new userRepository();
-        const returnArray = await repo.getAllPerfilAsync(idvisitor);
-        return returnArray;
-    }
+    
     cambiarContraseñaAsync = async (idvisitor, actualpassword, newpassword) => {
         const repo = new userRepository();
         const returnArray = await repo.cambiarContraseñaAsync(idvisitor, actualpassword, newpassword);

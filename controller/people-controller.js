@@ -61,6 +61,54 @@ router.get('/findperson/:name/:lastname', async (req, res) => {
     }
 });
 
+router.put('/updateperson/:idpeople', async (req, res) => {
+    const { idpeople } = req.params; // ID de la persona a actualizar
+    const { name, lastname, gender, age, photo, country } = req.body; // Datos a actualizar
+
+    if (!idpeople) {
+        return res.status(400).json({ message: 'ID is required to update a person.' });
+    }
+
+    try {
+        const result = await svc.updatePerson(idpeople, name, lastname, gender, age, photo, country);
+
+        if (result?.error) {
+            return res.status(400).json({ message: 'Error updating person.', error: result.error });
+        }
+
+        return res.status(200).json({
+            message: 'Person updated successfully.',
+            data: result
+        });
+    } catch (error) {
+        console.error('Error in /updateperson:', error);
+        return res.status(500).json({ message: 'Internal server error.', error: error.message });
+    }
+});
+
+router.delete('/deleteperson/:idpeople', async (req, res) => {
+    const { idpeople } = req.params; // ID de la persona a eliminar
+
+    if (!idpeople) {
+        return res.status(400).json({ message: 'ID is required to delete a person.' });
+    }
+
+    try {
+        const result = await svc.deletePerson(idpeople);
+
+        if (result?.error) {
+            return res.status(400).json({ message: 'Error deleting person.', error: result.error });
+        }
+
+        return res.status(200).json({
+            message: result.message
+        });
+    } catch (error) {
+        console.error('Error in /deleteperson:', error);
+        return res.status(500).json({ message: 'Internal server error.', error: error.message });
+    }
+});
+
 
 router.post('/login', async (req, res) => {
     const { name, lastname, password } = req.body;

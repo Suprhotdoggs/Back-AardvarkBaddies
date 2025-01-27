@@ -66,8 +66,97 @@ export default class peopleRepository {
         }
     };
     
+    updatePerson = async (idpeople, name, lastname, gender, age, photo, country) => {
+        const client = new Client(DBConfig);
+    
+        try {
+            await client.connect();
+    
+            // Construir una consulta dinámica para actualizar solo los campos proporcionados
+            const fieldsToUpdate = [];
+            const values = [];
+            let index = 1;
+    
+            if (name) {
+                fieldsToUpdate.push(`name = $${index++}`);
+                values.push(name);
+            }
+            if (lastname) {
+                fieldsToUpdate.push(`lastname = $${index++}`);
+                values.push(lastname);
+            }
+            if (gender) {
+                fieldsToUpdate.push(`gender = $${index++}`);
+                values.push(gender);
+            }
+            if (age) {
+                fieldsToUpdate.push(`age = $${index++}`);
+                values.push(age);
+            }
+            if (photo) {
+                fieldsToUpdate.push(`photo = $${index++}`);
+                values.push(photo);
+            }
+            if (country) {
+                fieldsToUpdate.push(`country = $${index++}`);
+                values.push(country);
+            }
+    
+            if (fieldsToUpdate.length === 0) {
+                return { error: 'No fields provided for update.' };
+            }
+    
+            // Agregar el ID como último valor
+            values.push(idpeople);
+    
+            // Construir consulta SQL
+            const query = `
+                UPDATE people
+                SET ${fieldsToUpdate.join(', ')}
+                WHERE idpeople = $${index}
+                RETURNING *;
+            `;
+    
+            const result = await client.query(query, values);
+    
+            await client.end();
+    
+            if (result.rows.length === 0) {
+                return { error: 'Person not found or no changes applied.' };
+            }
+    
+            return result.rows[0]; // Retornar los datos actualizados
+        } catch (error) {
+            console.error('Error updating person:', error);
+            return { error: 'Error updating person.' };
+        }
+    };
     
 
+    deletePerson = async (idpeople) => {
+        const client = new Client(DBConfig);
+    
+        try {
+            await client.connect();
+    
+            // Consulta SQL para eliminar la persona por su ID
+            const query = `DELETE FROM people WHERE idpeople = $1 RETURNING *;`;
+            const values = [idpeople];
+    
+            const result = await client.query(query, values);
+    
+            await client.end();
+    
+            if (result.rows.length === 0) {
+                return { error: 'Person not found.' };
+            }
+    
+            return { message: 'Person deleted successfully.' };
+        } catch (error) {
+            console.error('Error deleting person:', error);
+            return { error: 'Error deleting person.' };
+        }
+    };
     
 
     /*
