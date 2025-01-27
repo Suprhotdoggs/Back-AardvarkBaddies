@@ -3,6 +3,7 @@
 import express from "express"; // hacer npm i express
 import cors from "cors"; // hacer npm i cors
 import user from "./controller/user-controller.js"
+import people from "./controller/people-controller.js"
 const app = express();
 const port = 3000;
 
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/user', user)
+app.use('/people', people)
 
 
 app.listen (port, () => {
